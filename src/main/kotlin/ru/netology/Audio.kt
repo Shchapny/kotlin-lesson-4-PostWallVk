@@ -1,4 +1,3 @@
 package ru.netology
 
-class Audio {
-}
+class Audio

@@ -1,4 +1,3 @@
 package ru.netology
 
-class Link {
-}
+class Link
