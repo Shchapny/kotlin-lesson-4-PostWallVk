@@ -1,7 +1,9 @@
 package ru.netology
 
 object WallService {
+
     private var posts = emptyArray<Post>()
+    private var comments = emptyArray<Comment>()
 
     fun add(post: Post): Post {
         posts += if (posts.isEmpty()) post.copy(id = 1)
@@ -17,5 +19,15 @@ object WallService {
             }
         }
         return false
+    }
+
+    fun createComment(comment: Comment) {
+        for (currentPost in posts)
+            if (currentPost.id == comment.postId) {
+                comments += comment
+                return
+            }
+        throw PostNotFoundException("Пост не найден!")
+
     }
 }
