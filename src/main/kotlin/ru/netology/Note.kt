@@ -10,5 +10,10 @@ data class Note(
 //    val commentId: Int, // перенёс в data-class Comment
     val noteIds: Int? = null, // идентификаторы заметок, информацию о которых необходимо получить
     val userId: Int? = null, // идентификатор пользователя, информацию о заметках которого требуется получить
-    val count: Int = 20 // количество заметок, информацию о которых необходимо получить.
-)
+    val count: Int = 20, // количество заметок, информацию о которых необходимо получить.
+    var isDeleted: Boolean = false // удалён или не удалён пост
+) {
+    fun delete() {
+        isDeleted = true
+    }
+}

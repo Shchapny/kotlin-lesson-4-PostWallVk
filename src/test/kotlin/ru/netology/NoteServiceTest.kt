@@ -53,7 +53,7 @@ class NoteServiceTest {
         NoteService.add(note)
         val comment = Comment(commentId = 2)
         NoteService.createComment(comment)
-        val result = NoteService.deleteComment(2)
+        val result = NoteService.deleteComment(1)
 
         assertTrue(result)
     }
@@ -118,9 +118,8 @@ class NoteServiceTest {
     @Test
     fun getById() {
         val note = Note(noteId = 1, userId = 6)
-        val noteById = Note(noteId = 3, userId = 6)
         NoteService.add(note)
-        NoteService.getById(noteById)
+        NoteService.getById(3)
         val result = note
 
         assertEquals(note, result)
@@ -129,8 +128,7 @@ class NoteServiceTest {
     @Test(expected = NoteNotFoundException::class)
     fun shouldThrowGetById() {
         val note = Note(noteId = 1, ownerId = 2)
-        val getNote = Note(noteId = 44, ownerId = 2)
-        NoteService.getById(getNote)
+        NoteService.getById(44)
     }
 
     @Test
@@ -158,8 +156,7 @@ class NoteServiceTest {
         val comment = Comment(commentId = 2, ownerId = 4)
         NoteService.createComment(comment)
         NoteService.deleteComment(2)
-        val restore = Comment(commentId = 2, ownerId = 4)
-        val result = NoteService.restoreComment(restore)
+        val result = NoteService.restoreComment(2)
 
         assertTrue(result)
     }
@@ -167,7 +164,6 @@ class NoteServiceTest {
     @Test(expected = NoteNotFoundException::class)
     fun shouldThrowRestore() {
         val comment = Comment(commentId = 2, ownerId = 5)
-        val resComment = Comment(commentId = 3, ownerId = 5)
-        NoteService.restoreComment(resComment)
+        NoteService.restoreComment(3)
     }
 }

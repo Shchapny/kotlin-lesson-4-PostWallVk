@@ -9,5 +9,13 @@ data class Comment(
     val attachment: Attachment? = null, // список объектов, приложенных к комментарию и разделённых символом
     val stickerId: Int = 0, // идентификатор стикера
     val guid: String? = null, // уникальный идентификатор
-    val commentId: Int = 1 // идентификатор комментария
-)
+    val commentId: Int = 1, // идентификатор комментария
+    var isDeleted: Boolean = false // удалён или не удалён комментарий
+) {
+    fun delete() {
+        isDeleted = true
+    }
+    fun restore() {
+        isDeleted = false
+    }
+}

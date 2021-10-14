@@ -32,9 +32,9 @@ fun main() {
     NoteService.edit(note2)
     NoteService.editComment(commentNoteEdit)
     NoteService.get(note3)
-    NoteService.getById(note1)
+    NoteService.getById(1)
     NoteService.deleteComment(2)
-    NoteService.restoreComment(commentNote)
+    NoteService.restoreComment(2)
     NoteService.getComments(note3)
 
 

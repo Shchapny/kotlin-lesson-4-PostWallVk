@@ -1,11 +1,13 @@
 package ru.netology
 
+import java.awt.datatransfer.ClipboardOwner
+
 object NoteService {
 
     private val notes: MutableList<Note> = mutableListOf()
     private val comments: MutableList<Comment> = mutableListOf()
-    private val deleteNotes: MutableList<Note> = mutableListOf()
-    private val deleteComment: MutableList<Comment> = mutableListOf()
+//    private val deleteNotes: MutableList<Note> = mutableListOf()
+//    private val deleteComment: MutableList<Comment> = mutableListOf()
 
     fun add(note: Note): Note {
         if (notes.isEmpty()) notes.add(note.copy(noteId = 1))
@@ -26,7 +28,7 @@ object NoteService {
     fun delete(deleteIdNote: Int): Boolean {
         for (note in notes) {
             if (deleteIdNote == note.noteId) {
-                deleteNotes.add(note)
+                getById(deleteIdNote).delete()
                 notes.remove(note)
                 return true
             }
@@ -35,11 +37,12 @@ object NoteService {
     }
 
     fun deleteComment(deleteIdComment: Int): Boolean {
-        for (comment in comments) {
+        for ((index, comment) in comments.withIndex()) {
             if (deleteIdComment == comment.commentId) {
-                deleteComment.add(comment)
-                comments.remove(comment)
-                return true
+                if (!comments[index].isDeleted) {
+                    comments[index].delete()
+                    return true
+                }
             }
         }
         throw NoteNotFoundException("Нет доступа к комментарию, не найден")
@@ -47,7 +50,7 @@ object NoteService {
 
     fun edit(noteEdit: Note): Boolean {
         for (note in notes) {
-            if (noteEdit.noteId == note.noteId ) {
+            if (noteEdit.noteId == note.noteId) {
                 note.title = noteEdit.title
                 note.text = noteEdit.text
                 return true
@@ -77,11 +80,10 @@ object NoteService {
         throw NoteNotFoundException("Заметка не найдена")
     }
 
-    fun getById(getByNote: Note): List<Note> {
+    fun getById(id: Int): Note {
         for (note in notes) {
-            if (note.noteId == getByNote.noteId && note.ownerId == getByNote.ownerId) {
-                println(note.toString())
-                return listOf(note)
+            if (note.noteId == id && !note.isDeleted) {
+                return note
             }
         }
         throw NoteNotFoundException("Заметка не найдена")
@@ -98,12 +100,13 @@ object NoteService {
         throw NoteNotFoundException("Заметка не найдена")
     }
 
-    fun restoreComment(resComment: Comment): Boolean {
-        for (comment in deleteComment) {
-            if (resComment.commentId == comment.commentId && resComment.ownerId == comment.ownerId) {
-                comments.add(comment)
-                deleteComment.remove(comment)
-                return true
+    fun restoreComment(id: Int): Boolean {
+        for ((index, comment) in comments.withIndex()) {
+            if (id == comment.commentId) {
+                if (comments[index].isDeleted) {
+                    comments[index].restore()
+                    return true
+                }
             }
         }
         throw NoteNotFoundException("Нет доступа к комментарию, не найден")
