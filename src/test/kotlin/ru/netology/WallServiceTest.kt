@@ -13,7 +13,7 @@ class WallServiceTest {
 
         val result = WallService.add(post).id
 
-        assertEquals(3, result)
+        assertEquals(4, result)
     }
 
     @Test
@@ -24,6 +24,7 @@ class WallServiceTest {
         val result = WallService.update(post2)
         assertTrue(result)
     }
+
     @Test
     fun update_false() {
         val post = Post(id = 14, date = LocalTime.now())
@@ -31,5 +32,23 @@ class WallServiceTest {
         WallService.add(post)
         val result = WallService.update(post2)
         assertFalse(result)
+    }
+
+    @Test
+    fun addComment() {
+        val post = Post(id = 2, date = LocalTime.now(), ownerId = 12345)
+        val comment = Comment(postId = 1, message = "Комментарий")
+        WallService.add(post)
+        WallService.createComment(comment)
+        val result = comment.message
+
+        assertEquals("Комментарий", result)
+
+    }
+
+    @Test(expected = PostNotFoundException::class)
+    fun shouldThrow() {
+        val comment = Comment(postId = 16)
+        WallService.createComment(comment)
     }
 }
